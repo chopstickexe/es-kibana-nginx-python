@@ -1,0 +1,57 @@
+version: "2.4"
+services:
+  es:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.1
+    container_name: es
+    environment:
+      discovery.type: single-node
+      bootstrap.memory_lock: "true"
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data01:/usr/share/elasticsearch/data
+    expose:
+      - 9200
+    networks:
+      - elastic
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.9.1
+    container_name: kibana
+    environment:
+      VIRTUAL_HOST: localhost
+      ELASTICSEARCH_URL: http://es:9200
+      ELASTICSEARCH_HOSTS: http://es:9200
+    networks:
+      - elastic
+
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx
+    ports:
+      - 80:80
+    volumes:
+      - ./htpasswd:/etc/nginx/htpasswd
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      - elastic
+
+  python:
+    image: python:3.8.5
+    container_name: python
+    volumes:
+      - .:/opt/app
+    tty: true  # Keep this container alive
+    networks:
+      - elastic
+
+volumes:
+  data01:
+    driver: local
+
+networks:
+  elastic:
+    driver: bridge
