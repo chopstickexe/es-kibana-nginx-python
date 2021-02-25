@@ -49,4 +49,6 @@ These plugins are required when using Japanese (Kuromoji) tokenizer in Elasticse
 $ docker exec -it es bash
 # bin/elasticsearch-plugin install analysis-kuromoji
 # bin/elasticsearch-plugin install analysis-icu
+# exit
+$ docker restart es
 ```
