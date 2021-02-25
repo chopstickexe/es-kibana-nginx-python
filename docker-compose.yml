@@ -44,6 +44,9 @@ services:
     container_name: python
     volumes:
       - .:/opt/app
+    working_dir: /opt/app
+    ports:
+      - 8888:8888
     tty: true  # Keep this container alive
     networks:
       - elastic

@@ -40,3 +40,15 @@ $ docker exec -it python bash
 (.venv) # python index.py
 Finished indexing
 ```
+
+## 4. (Optional) Install Elasticsearch ICU Analysis and Japanese Analysis Plugins
+
+These plugins are required when using Japanese (Kuromoji) tokenizer in Elasticsearch.
+
+```
+$ docker exec -it es bash
+# bin/elasticsearch-plugin install analysis-kuromoji
+# bin/elasticsearch-plugin install analysis-icu
+# exit
+$ docker restart es
+```
